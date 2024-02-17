@@ -6,8 +6,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import rh.civil.apirhcivil.dto.DadosCadastrarFuncao;
+import rh.civil.apirhcivil.dto.DadosListagemFuncao;
 import rh.civil.apirhcivil.entidade.Funcao;
 import rh.civil.apirhcivil.repository.FuncaoRepository;
 
@@ -19,8 +23,12 @@ public class FuncaoController {
 	private FuncaoRepository repository;
 	
 	@PostMapping
-	
+	@Transactional
 	public void cadastrar(@RequestBody @Valid DadosCadastrarFuncao dados) {
 		repository.save(new Funcao(dados));
+	}
+	
+	public List<DadosListagemFuncao> listar() {
+		return repository.findAll().stream().map(DadosListagemFuncao::new).toList();
 	}
 }
